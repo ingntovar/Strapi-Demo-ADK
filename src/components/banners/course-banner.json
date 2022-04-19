@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_banners_course_banners",
+  "info": {
+    "displayName": "Course Banner",
+    "icon": "address-card",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "copy": {
+      "type": "richtext",
+      "required": true
+    },
+    "bg_image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "CTAText": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

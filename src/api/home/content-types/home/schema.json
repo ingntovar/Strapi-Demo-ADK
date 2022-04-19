@@ -1,0 +1,26 @@
+{
+  "kind": "singleType",
+  "collectionName": "homes",
+  "info": {
+    "singularName": "home",
+    "pluralName": "homes",
+    "displayName": "Home",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "CourseBanner": {
+      "type": "component",
+      "repeatable": false,
+      "component": "banners.course-banner"
+    },
+    "CollectionBanner": {
+      "type": "component",
+      "repeatable": false,
+      "component": "banners.collection-banner"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_banners_collection_banners",
+  "info": {
+    "displayName": "Collection Banner",
+    "icon": "archive",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "copy": {
+      "type": "richtext"
+    },
+    "featuredGuitar": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::guitar.guitar"
+    },
+    "bannerImage": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    }
+  }
+}
