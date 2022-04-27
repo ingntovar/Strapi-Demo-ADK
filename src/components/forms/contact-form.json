@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_forms_contact_forms",
+  "info": {
+    "displayName": "Contact Form",
+    "icon": "envelope",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "Title": {
+      "type": "string"
+    },
+    "Copy": {
+      "type": "richtext"
+    }
+  }
+}

@@ -4,7 +4,8 @@
   "info": {
     "singularName": "guitar",
     "pluralName": "guitars",
-    "displayName": "Guitars"
+    "displayName": "Guitars",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -20,12 +21,12 @@
       "required": true
     },
     "image": {
-      "allowedTypes": [
-        "images"
-      ],
       "type": "media",
       "multiple": false,
-      "required": true
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
     },
     "price": {
       "type": "decimal",
@@ -34,6 +35,12 @@
     "slug": {
       "type": "uid",
       "targetField": "name"
+    },
+    "genres": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::genre.genre",
+      "mappedBy": "guitars"
     }
   }
 }
