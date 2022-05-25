@@ -25,6 +25,12 @@
     "slug": {
       "type": "uid",
       "targetField": "name"
+    },
+    "guitars_2s": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::guitars2.guitars2",
+      "inversedBy": "genres"
     }
   }
 }

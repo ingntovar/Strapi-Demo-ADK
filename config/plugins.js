@@ -5,7 +5,7 @@ module.exports = {
     resolve: './src/plugins/field-test'
   },
   'view-page': {
-    enabled: false,
+    enabled: true,
     resolve: './src/plugins/view-page'
   },
 

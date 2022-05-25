@@ -1,0 +1,38 @@
+{
+  "kind": "collectionType",
+  "collectionName": "posts2s",
+  "info": {
+    "singularName": "posts2",
+    "pluralName": "posts2s",
+    "displayName": "Posts2"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "excerpt": {
+      "type": "text"
+    },
+    "thumbnail": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    },
+    "content": {
+      "type": "richtext"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
+    }
+  }
+}

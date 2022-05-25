@@ -7,6 +7,7 @@ import { Box } from '@strapi/design-system/Box';
 import Pencil from '@strapi/icons/Pencil';
 import { TextInput } from '@strapi/design-system/TextInput';
 import { Button } from '@strapi/design-system/Button';
+import { Link } from '@strapi/design-system/Link';
 
 
 import {useCMEditViewDataManager} from '@strapi/helper-plugin'
@@ -14,7 +15,7 @@ import axiosInstance from "../utils/axiosInstance";
 import { handleSubmit } from "./helpers";
 
 
-function useRelatedViewUrl(status, setStatus, setInputValue) {
+function useRelatedViewUrl(setViewUrl, setStatus, setInputValue, setScreenData) {
   const { initialData, isSingleType, slug } = useCMEditViewDataManager();
 
   const refetchViewUrl = async () => {
@@ -29,6 +30,8 @@ function useRelatedViewUrl(status, setStatus, setInputValue) {
 
       setStatus("success");
       setInputValue(data.viewUrl[0].url)
+      setViewUrl(data.viewUrl)
+      setScreenData(data)
     } catch (e) {
       setStatus("error");
     }
@@ -50,12 +53,17 @@ function useRelatedViewUrl(status, setStatus, setInputValue) {
 
 const ViewInput = () => {
   const { allLayoutData, slug, initialData }  =useCMEditViewDataManager()
+  
   const [status, setStatus] = useState("loading")
   const [inputValue, setInputValue] = useState( '' )
-  const { refetchViewUrl } = useRelatedViewUrl(status, setStatus, setInputValue)
+  const [viewUrl, setViewUrl] = useState(null)
+  const [screenData, setScreenData] = useState({})
+  
+  const { refetchViewUrl } = useRelatedViewUrl(setViewUrl, setStatus, setInputValue, setScreenData)
   
   const [expanded, setExpanded] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true)
+
 
  
 
@@ -79,19 +87,36 @@ const ViewInput = () => {
       // Show loading state
       setStatus("loading");
 
-      // Create task and link it to the related entry
-      const urlToSave = await axiosInstance.post(
-        "/content-manager/collection-types/plugin::view-page.view-url/3",
-        {
-          url: inputValue,
-          related: {
-            __type: slug,
-            id: initialData.id,
-          },
-        }
-      );
+      await refetchViewUrl()
+      if(viewUrl === null){
 
-      console.log(urlToSave)
+        const urlToSave = await axiosInstance.post(
+          "/content-manager/collection-types/plugin::view-page.view-url",
+          {
+            url: inputValue,
+            related: {
+              __type: slug,
+              id: initialData.id,
+            },
+          }
+        );
+        console.log(urlToSave)
+      }else{
+        const urlToSave = await axiosInstance.put(
+          `/content-manager/collection-types/plugin::view-page.view-url/${viewUrl[0].id}`,
+          {
+            url: inputValue,
+            related: {
+              __type: slug,
+              id: initialData.id,
+            },
+          }
+        );
+        console.log(urlToSave)
+      }
+
+      console.log('input',inputValue)
+
 
       // Refetch tasks list so it includes the created one
       await refetchViewUrl();
@@ -120,14 +145,22 @@ const ViewInput = () => {
               value={inputValue} 
               disabled={isDisabled} 
             />
+            {(viewUrl) && (
+              <Box>
+                <Link href={inputValue} isExternal>External link</Link>
+              </Box>
+            )}
+          
           </Box>
-          <Box padding={3}>
-            <Button 
-              variant='success' 
-              size="S"
-              onClick = {handleSubmit}
-            >Save</Button>
-          </Box>
+          {(!isDisabled) && (
+            <Box padding={3}>
+              <Button 
+                variant='success' 
+                size="S"
+                onClick = {handleSubmit}
+              >Save</Button>
+            </Box>
+          )}
         </AccordionContent>
       </Accordion>
     </div>
