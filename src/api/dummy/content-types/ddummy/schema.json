@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "dummies",
+  "info": {
+    "singularName": "ddummy",
+    "pluralName": "dummies",
+    "displayName": "dummy",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true,
+    "comment": ""
+  },
+  "attributes": {
+    "json": {
+      "type": "json"
+    },
+    "fieldnew": {
+      "type": "json",
+      "pluginOptions": {
+        "field-test" : {
+          "enabled": true
+        }
+      }
+    }
+  }
+}
