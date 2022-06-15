@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 import { Accordion, AccordionToggle, AccordionContent, AccordionGroup } from '@strapi/design-system/Accordion';
-import { Typography } from '@strapi/design-system/Typography';
 import { IconButton } from '@strapi/design-system/IconButton';
 import { Box } from '@strapi/design-system/Box';
 import Pencil from '@strapi/icons/Pencil';
@@ -11,9 +10,7 @@ import { Link } from '@strapi/design-system/Link';
 
 
 import {useCMEditViewDataManager} from '@strapi/helper-plugin'
-import axiosInstance from "../utils/axiosInstance";
-import { handleSubmit } from "./helpers";
-
+import axiosInstance from "../../utils/axiosInstance";
 
 function useRelatedViewUrl(setViewUrl, setStatus, setInputValue, setScreenData) {
   const { initialData, isSingleType, slug } = useCMEditViewDataManager();
@@ -140,14 +137,13 @@ const ViewInput = () => {
               placeholder="Edit content url" 
               aria-label="View Url"  
               name="content" 
-              hint="View url" 
               onChange={e => setInputValue(e.target.value)} 
               value={inputValue} 
               disabled={isDisabled} 
             />
             {(viewUrl) && (
-              <Box>
-                <Link href={inputValue} isExternal>External link</Link>
+              <Box paddingTop={5}>
+                <Link href={inputValue} isExternal>{`View ${allLayoutData.contentType.info.singularName}`}</Link>
               </Box>
             )}
           

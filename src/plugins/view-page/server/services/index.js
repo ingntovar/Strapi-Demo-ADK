@@ -1,7 +1,7 @@
 'use strict';
 
-const myService = require('./my-service');
+const viewUrl = require('./view-url');
 
 module.exports = {
-  myService,
+  viewUrl,
 };
