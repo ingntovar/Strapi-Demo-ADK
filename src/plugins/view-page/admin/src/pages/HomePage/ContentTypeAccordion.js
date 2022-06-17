@@ -2,29 +2,37 @@ import React, {useState, useEffect} from 'react'
 
 import { Accordion, AccordionToggle, AccordionContent, AccordionGroup } from '@strapi/design-system/Accordion';
 import { IconButton } from '@strapi/design-system/IconButton';
-import { Typography } from '@strapi/design-system/Typography';
 import { Box } from '@strapi/design-system/Box';
 import { Stack } from '@strapi/design-system/Stack';
+import { TextInput } from '@strapi/design-system/TextInput';
 
 import Pencil from '@strapi/icons/Pencil';
-import Trash from '@strapi/icons/Trash';
 import User from '@strapi/icons/User';
 
-const ContentTypeAccordion = ({contentTypes}) => {
+
+const ContentTypeAccordion = ({contentTypes, CTParentSlugs, setCTParentSlugs}) => {
 
   
   if(contentTypes == null || contentTypes == undefined || contentTypes.length < 1) return
   
-  const [expandedObject, setExpanded] = useState(true);
+  const [expandedObject, setExpanded] = useState({})
+
 
   useEffect(() => {
     
     let expanded = {}
-    contentTypes.map(contentType => {(
+    let parentSlugs = {}
+    contentTypes.forEach(contentType => {
       expanded[contentType] = true
-    )});
+      parentSlugs[contentType] = '' //To avoid uncontrollable management of this state on the jsx component; the object key is not defined at first
+    });
+    
+    setCTParentSlugs(parentSlugs)
     setExpanded(expanded)
-  }, [ ])
+
+  }, [])
+  
+  
   
   const handleAccordionToggle = contentType => {
     setExpanded({
@@ -33,30 +41,35 @@ const ContentTypeAccordion = ({contentTypes}) => {
     })
   }
 
-  
+  const handleParentSlugs = e => {
+    let currentId = e.target.id
+    let currentValue = e.target.value
+
+    setCTParentSlugs({
+      ...CTParentSlugs,
+      [currentId] : currentValue
+    })  
+  }
+
   return (
     <div>
         <Box padding={8} background="neutral0">
-          <AccordionGroup  label="Label" >
+          <AccordionGroup  label="Parent Slugs">
             
             { contentTypes.map( contentType => (
 
               <Accordion  key={contentType} expanded={expandedObject[contentType]} onToggle={ () => handleAccordionToggle(contentType) } size="S">
                 <AccordionToggle startIcon={<User aria-hidden={true} />} action={<Stack horizontal spacing={0}>
                       <IconButton noBorder onClick={() => console.log('edit')} label="Edit" icon={<Pencil />} />
-                      <IconButton noBorder onClick={() => console.log('delete')} label="Delete" icon={<Trash />} />
                     </Stack>} title={contentType.replace(/^\w/, (c) => c.toUpperCase())} togglePosition="left" />
                 <AccordionContent>
                   <Box padding={3}>
-                    <Typography>{contentType}</Typography>
+                    <TextInput id={contentType} placeholder={contentType} label="Slug" name="slug"  onChange={handleParentSlugs} value={CTParentSlugs[contentType]}  />
                   </Box>
                 </AccordionContent>
               </Accordion>
             
             )) }
-            
-
-
             
           </AccordionGroup>
         </Box>

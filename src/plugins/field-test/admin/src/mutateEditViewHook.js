@@ -1,5 +1,5 @@
 const mutateLayout = layout => layout.map( row => {
-  console.log('currentRow : ', row)
+  // console.log('currentRow : ', row)
   const mutateRow = row.reduce((acc, field)=>{
 
     const isFieldNewEnabled = field.fieldSchema.pluginOptions?.['field-test'].enabled;
@@ -12,7 +12,7 @@ const mutateLayout = layout => layout.map( row => {
     
   }, [] );
 
-  console.log('maybeRowMutated: ', mutateRow)
+  // console.log('maybeRowMutated: ', mutateRow)
   return mutateRow;
 })
 

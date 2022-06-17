@@ -8,86 +8,123 @@ import { TextInput } from '@strapi/design-system/TextInput';
 import { Button } from '@strapi/design-system/Button';
 import { Link } from '@strapi/design-system/Link';
 
-
 import {useCMEditViewDataManager} from '@strapi/helper-plugin'
 import axiosInstance from "../../utils/axiosInstance";
 
-function useRelatedViewUrl(setViewUrl, setStatus, setInputValue, setScreenData) {
-  const { initialData, isSingleType, slug } = useCMEditViewDataManager();
+/**
+ * 
+ * Custom Hook to get the current view-url value, dependending on the current screen
+ * 
+ * 
+ */
+
+function useRelatedViewUrl(setViewUrl, setInputValue, setHasAutomaticSlug) {
+  const { initialData, isSingleType, slug, allLayoutData } = useCMEditViewDataManager();
 
   const refetchViewUrl = async () => {
     try {
-      const { data } = await axiosInstance.get(
+      const {data}  = await axiosInstance.get(
         `/content-manager/${
           isSingleType ? "single-types" : "collection-types"
         }/${slug}/${isSingleType ? "" : initialData.id}?populate=viewUrl`
       );
 
-      console.log('que es esto? ',data)
-
-      setStatus("success");
-      setInputValue(data.viewUrl[0].url)
-      setViewUrl(data.viewUrl)
-      setScreenData(data)
-    } catch (e) {
-      setStatus("error");
+      if(!data.viewUrl){ //Setting automatic link in case there's no instance of any previous link on the DB
+        setHasAutomaticSlug(true)
+        const {domain, parentSlugs} = await getSettings()
+        const currentContentType = allLayoutData.contentType.info.pluralName
+        let theLink = ''
+        const maybeId = initialData.id
+        const maybeSlug = initialData.slug
+        
+        const currentSlug = (maybeSlug === undefined) ? maybeId : maybeSlug
+        
+        if(isSingleType){
+          const slugSingular = allLayoutData.contentType.info.singularName
+          theLink = `${domain}/${slugSingular}`
+        }else{
+          const currentParentSlug = parentSlugs[currentContentType]
+          theLink = `${domain}/${currentParentSlug}/${currentSlug}`
+        }
+        
+        setInputValue(theLink)
+        setViewUrl(theLink)
+      }else{
+        setInputValue(data.viewUrl[0].url)
+        setViewUrl(data.viewUrl)
+      }
+    } catch (err) {
+      console.log(err)
     }
   };
 
   useEffect(async () => {
     await refetchViewUrl();
-  }, [initialData, isSingleType, axiosInstance, setStatus]);
+  }, [initialData, isSingleType, axiosInstance ]);
 
   return { refetchViewUrl };
 }
 
+/**
+ * 
+ * Custom Hook to get the current view-url value, dependending on the current screen
+ * 
+ * 
+ */
+const getSettings = async () => {
+  const {data} = await axiosInstance.get('/view-page/settings')
+  return data
+}
 
-
-
-
-
-
+/**
+ *
+ * 
+ * MAIN COMPONENT
+ * 
+ * 
+ */
 
 const ViewInput = () => {
-  const { allLayoutData, slug, initialData }  =useCMEditViewDataManager()
+  const { allLayoutData, slug, initialData, }  =useCMEditViewDataManager()
   
-  const [status, setStatus] = useState("loading")
   const [inputValue, setInputValue] = useState( '' )
   const [viewUrl, setViewUrl] = useState(null)
-  const [screenData, setScreenData] = useState({})
+  const [hasAutomaticSlug, setHasAutomaticSlug] = useState(false)
   
-  const { refetchViewUrl } = useRelatedViewUrl(setViewUrl, setStatus, setInputValue, setScreenData)
+  const { refetchViewUrl } = useRelatedViewUrl(setViewUrl, setInputValue, setHasAutomaticSlug)
   
   const [expanded, setExpanded] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true)
 
-
- 
-
+  /**
+   * 
+   * Handle the form edit button
+   * To enabled or disabled the input text
+   *  
+   */
 
   const handleEdit = () => {
     if(isDisabled){
       return setIsDisabled(false)
     }
-
     return setIsDisabled(true)
   }
 
+  /**
+   * 
+   * Handle the injected form
+   * Two options to trigger: Add a new view-url 'post' or updated with the current id. 
+   *  
+   */
+
   const handleSubmit = async (e) => {
-    // Prevent submitting parent form
-    e.preventDefault();
+    e.preventDefault();  // Prevent submitting parent form
     e.stopPropagation();
-
-    console.log('submitted')
-
     try {
-      // Show loading state
-      setStatus("loading");
-
       await refetchViewUrl()
-      if(viewUrl === null){
-
-        const urlToSave = await axiosInstance.post(
+      if(viewUrl === null || hasAutomaticSlug ){
+        
+        await axiosInstance.post(
           "/content-manager/collection-types/plugin::view-page.view-url",
           {
             url: inputValue,
@@ -97,9 +134,10 @@ const ViewInput = () => {
             },
           }
         );
-        console.log(urlToSave)
+
+        setHasAutomaticSlug(false)
       }else{
-        const urlToSave = await axiosInstance.put(
+        await axiosInstance.put(
           `/content-manager/collection-types/plugin::view-page.view-url/${viewUrl[0].id}`,
           {
             url: inputValue,
@@ -109,21 +147,11 @@ const ViewInput = () => {
             },
           }
         );
-        console.log(urlToSave)
       }
-
-      console.log('input',inputValue)
-
-
-      // Refetch tasks list so it includes the created one
-      await refetchViewUrl();
-
-      // Remove loading and close popup
-      setStatus("success");
+      await refetchViewUrl(); // Refetch tasks list so it includes the created one
       setIsDisabled(true)
-    } catch (e) {
-      console.log(e)
-      setStatus("error");
+    } catch (err) {
+      console.log(err)
     }
   };
 
