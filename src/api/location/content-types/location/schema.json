@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "locations",
+  "info": {
+    "singularName": "location",
+    "pluralName": "locations",
+    "displayName": "Locations",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Map": {
+      "type": "customField",
+      "customField": "plugin::map-field.map"
+    },
+    "viewUrl": {
+      "type": "relation",
+      "relation": "morphMany",
+      "target": "plugin::view-page.view-url",
+      "morphBy": "related",
+      "configurable": false
+    },
+    "Title": {
+      "type": "string"
+    }
+  }
+}
