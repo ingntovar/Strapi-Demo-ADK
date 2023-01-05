@@ -5,7 +5,9 @@
   "strapi": {
     "name": "view-page",
     "description": "Description of view-page plugin",
-    "kind": "plugin"
+    "kind": "plugin",
+    "displayName": "View Page Plugin"
+
   },
   "dependencies": {},
   "author": {

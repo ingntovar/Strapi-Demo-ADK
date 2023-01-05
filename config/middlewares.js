@@ -8,8 +8,8 @@ module.exports = [
         userDefaults: true,
         directives: {
           'connect-src': ["'self'", 'https:'],
-          'img-src': ["'self'", 'data:', 'blob:', 'res.cloudinary.com'],
-          'media-src': ["'self'", 'data:', 'blob:', 'res.cloudinary.com' ],
+          'img-src': ["'self'", 'data:', 'blob:', 'res.cloudinary.com', '*.tile.openstreetmap.org'],
+          'media-src': ["'self'", 'data:', 'blob:', 'res.cloudinary.com', '*.tile.openstreetmap.org' ],
           upgradeInsecureRequests: null,
         }
       }

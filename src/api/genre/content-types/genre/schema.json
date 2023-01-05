@@ -30,7 +30,7 @@
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::guitars2.guitars2",
-      "inversedBy": "genres"
+      "mappedBy": "genres"
     }
   }
 }

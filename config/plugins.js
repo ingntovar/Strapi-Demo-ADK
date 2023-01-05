@@ -25,5 +25,9 @@ module.exports = ({ env }) => ({
     enabled: true,
     resolve: './src/plugins/view-page'
   },
+  'map-field': {
+    enabled: true,
+    resolve: './src/plugins/map-field'
+  },
 });
  
