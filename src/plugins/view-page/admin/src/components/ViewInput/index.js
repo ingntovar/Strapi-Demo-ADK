@@ -67,7 +67,7 @@ function useRelatedViewUrl(setViewUrl, setInputValue, setHasAutomaticSlug) {
 
 /**
  * 
- * Custom Hook to get the current view-url value, dependending on the current screen
+ * Getting settings to render on the View Url editor UI
  * 
  * 
  */
@@ -113,7 +113,7 @@ const ViewInput = () => {
   /**
    * 
    * Handle the injected form
-   * Two options to trigger: Add a new view-url 'post' or updated with the current id. 
+   * Two options to trigger: Add a new view-url 'post' or update with the current id. 
    *  
    */
 

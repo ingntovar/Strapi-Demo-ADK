@@ -8,8 +8,8 @@ module.exports = [
         userDefaults: true,
         directives: {
           'connect-src': ["'self'", 'https:'],
-          'img-src': ["'self'", 'data:', 'blob:', 'res.cloudinary.com', '*.tile.openstreetmap.org'],
-          'media-src': ["'self'", 'data:', 'blob:', 'res.cloudinary.com', '*.tile.openstreetmap.org' ],
+          'img-src': ["'self'", 'data:', 'blob:', 'res.cloudinary.com', '*.tile.openstreetmap.org', 'dl.airtable.com'],
+          'media-src': ["'self'", 'data:', 'blob:', 'res.cloudinary.com', '*.tile.openstreetmap.org', 'dl.airtable.com' ],
           upgradeInsecureRequests: null,
         }
       }

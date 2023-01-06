@@ -27,12 +27,12 @@ const MapInput = ({
   const [position, setPosition] = useState(
     (!value) ? '' : JSON.parse(value)
   )
-  const [centerPos, setCenterPos] = useState(
+  const [centerPos] = useState(
     (!position || Object.keys(position).length === 0) ? [51.505, -0.09] : [position.lat, position.lng]
   )
   const [markerIcon, setMarkerIcon] = useState('')
+  const [currentPosition] = useState(position)
   
-  console.log('getting', JSON.parse(null))
   useEffect(() => {
     const Licon = L.icon({iconUrl: theIcon})
     setMarkerIcon(Licon)
@@ -40,7 +40,10 @@ const MapInput = ({
 
   useEffect(()=>{
     const positionJSON = JSON.stringify({...position});
-    onChange({ target: { name, value: positionJSON }})
+    if(currentPosition !== position){
+      onChange({ target: { name, value: positionJSON }})
+    }
+
   }, [position])
 
   const { formatMessage } = useIntl();
